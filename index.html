@@ -5,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlphaTrade | رادار هوشمند رمزارز</title>
     <style>
-        :root {
-            --bg-color: #06080c;
-            --card-bg: #0d1117;
-            --text-color: #c9d1d9;
-            --neon-gold: #fcd535;
-            --neon-glow: #ffaa00;
-            --green: #0ecb81;
-            --red: #f6465d;
-        }
+        :root { --bg-color: #06080c; --card-bg: #0d1117; --neon-gold: #fcd535; --green: #0ecb81; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; }
+        body { background-color: var(--bg-color); color: #c9d1d9; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; }
         header { text-align: center; margin-bottom: 25px; padding: 30px 20px; background: #0f141c; border-radius: 16px; border: 1px solid rgba(252, 213, 53, 0.15); }
         h1 { color: var(--neon-gold); font-size: 24px; margin-top: 10px; }
@@ -25,69 +17,59 @@
         .price-row { padding: 12px; background: #161b22; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
         input, select, button { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #21262d; background: #161b22; color: white; }
         button { background: var(--neon-gold); color: #000; font-weight: bold; border: none; cursor: pointer; }
+        .btn-vip { background: var(--green) !important; color: #fff !important; }
         .alert-item { background: #161b22; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-right: 4px solid var(--neon-gold); font-size: 14px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <header>
-        <h1>AlphaTrade</h1>
-        <p>رادار هوشمند رمزارزها</p>
-    </header>
-   <button onclick="requestPermission()" style="background: #21262d; color: var(--neon-gold); border: 1px solid var(--neon-gold);">
-    🔔 فعال‌سازی دریافت هشدار (Notification)
-</button>
-  <div class="dollar-box">
+    <header><h1>AlphaTrade</h1><p>رادار هوشمند رمزارزها</p></header>
+
+    <button onclick="requestPermission()" style="background: #21262d; color: var(--neon-gold); border: 1px solid var(--neon-gold);">🔔 فعال‌سازی دریافت هشدار</button>
+
+    <div class="dollar-box">
         <h2>💵 نرخ دلار</h2>
         <div class="dollar-price-huge" id="live-dollar-data">...</div>
         <input type="number" id="manual-rate" placeholder="تنظیم دستی نرخ (تومان)">
         <button onclick="setManualRate()">اعمال نرخ دستی</button>
-  </div>
+    </div>
+
     <div class="card" style="border: 2px solid var(--neon-gold);">
-    <h3>🚀 عضویت ویژه (VIP)</h3>
-    <p style="font-size: 13px; margin-bottom: 10px;">برای دریافت سیگنال‌های VIP شماره خود را وارد کنید و اشتراک بگیرید.</p>
-    
-    <form id="vip-form">
-        <input type="tel" id="user-phone" placeholder="شماره موبایل (مثلا: 0912...)" required>
-        <button type="submit" style="background: var(--green); color: #fff;">ثبت شماره و ارتقا به VIP</button>
-    </form>
-</div>
->
-   <div class="card">
+        <h3>🚀 عضویت ویژه (VIP)</h3>
+        <p style="font-size: 13px; margin-bottom: 10px;">برای دریافت سیگنال‌های VIP شماره خود را وارد و پرداخت کنید.</p>
+        <input type="tel" id="user-phone" placeholder="شماره موبایل">
+        <button class="btn-vip" onclick="goToPayment()">پرداخت اشتراک در ریمیت</button>
+    </div>
+
+    <div class="card">
         <h3>🔍 جستجوی ارزها</h3>
         <input type="text" id="search-input" placeholder="نام ارز (مثلا BTC)">
         <div id="crypto-list"></div>
     </div>
+
     <div class="card">
         <h3>🔔 تنظیم هشدار</h3>
         <form id="alert-form">
             <input type="text" id="alert-coin-symbol" placeholder="نماد ارز (مثلا BTC)" required>
-            <select id="alert-type">
-                <option value="less">خرید (کمتر از)</option>
-                <option value="greater">فروش (بیشتر از)</option>
-            </select>
+            <select id="alert-type"><option value="less">خرید (کمتر از)</option><option value="greater">فروش (بیشتر از)</option></select>
             <input type="number" id="alert-target" placeholder="قیمت هدف (تومان)" required>
             <button type="submit">ثبت هشدار</button>
         </form>
     </div>
-    <div class="card">
-        <h3>📋 هشدارهای فعال</h3>
-        <div id="active-alerts"></div>
-    </div>
+    <div class="card"><h3>📋 هشدارهای فعال</h3><div id="active-alerts"></div></div>
 </div>
 
 <script>
     let allCoins = []; let userAlerts = []; let liveDollarPrice = 75000;
 
-    function requestPermission() {
-        if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
-    }
-
-    function triggerAlert(message) {
-        if ("Notification" in window && Notification.permission === "granted") {
-            new Notification("AlphaTrade Alert", { body: message });
-        }
-        alert(message);
+    function requestPermission() { if ("Notification" in window) Notification.requestPermission(); }
+    
+    function goToPayment() {
+        const phone = document.getElementById('user-phone').value;
+        if(phone) {
+            localStorage.setItem('user_phone', phone);
+            window.location.href = "https://reymit.ir/fariborz_2013";
+        } else { alert("لطفاً شماره موبایل خود را وارد کنید."); }
     }
 
     async function fetchLiveDollar() {
@@ -95,10 +77,7 @@
             const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://pro-api.tgju.org/v1/market/indicator/summary/price_dollar_rl'));
             const data = await res.json();
             const payload = JSON.parse(data.contents);
-            if(payload.price && !localStorage.getItem('custom_rate')) {
-                liveDollarPrice = parseFloat(payload.price.current) / 10;
-                updateDollarDisplay();
-            }
+            if(payload.price && !localStorage.getItem('custom_rate')) { liveDollarPrice = parseFloat(payload.price.current) / 10; updateDollarDisplay(); }
         } catch(e) {}
     }
 
@@ -124,32 +103,25 @@
         list.innerHTML = filtered.map(c => `<div class="price-row"><div>${c.symbol.toUpperCase()}</div><div>${Math.round(c.current_price * liveDollarPrice).toLocaleString()} تومان</div></div>`).join('');
     }
 
+    document.getElementById('alert-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        userAlerts.push({ symbol: document.getElementById('alert-coin-symbol').value.toUpperCase(), type: document.getElementById('alert-type').value, target: parseFloat(document.getElementById('alert-target').value) });
+        renderAlerts();
+    });
+
+    function renderAlerts() { document.getElementById('active-alerts').innerHTML = userAlerts.map(a => `<div class="alert-item">${a.symbol} در ${a.target.toLocaleString()}</div>`).join(''); }
+
     function checkAlertsEngine() {
-        userAlerts.forEach((a, index) => {
+        userAlerts.forEach((a, i) => {
             const coin = allCoins.find(c => c.symbol.toUpperCase() === a.symbol);
             if (coin) {
                 const price = coin.current_price * liveDollarPrice;
                 if ((a.type === 'less' && price <= a.target) || (a.type === 'greater' && price >= a.target)) {
-                    triggerAlert(`هشدار AlphaTrade: قیمت ${a.symbol} به ${price.toLocaleString()} تومان رسید.`);
-                    userAlerts.splice(index, 1); renderAlerts();
+                    alert(`هشدار: ${a.symbol} به ${price.toLocaleString()} رسید.`);
+                    userAlerts.splice(i, 1); renderAlerts();
                 }
             }
         });
-    }
-
-    document.getElementById('alert-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        requestPermission();
-        userAlerts.push({ 
-            symbol: document.getElementById('alert-coin-symbol').value.toUpperCase(),
-            type: document.getElementById('alert-type').value,
-            target: parseFloat(document.getElementById('alert-target').value)
-        });
-        renderAlerts();
-    });
-
-    function renderAlerts() {
-        document.getElementById('active-alerts').innerHTML = userAlerts.map(a => `<div class="alert-item">${a.symbol} در ${a.target.toLocaleString()}</div>`).join('');
     }
 
     document.getElementById('search-input').addEventListener('keyup', searchCrypto);

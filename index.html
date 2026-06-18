@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AlphaTrade | رادار هوشمند رمزارز</title>
     <style>
-        :root { --bg-color: #06080c; --card-bg: #0d1117; --neon-gold: #fcd535; --green: #0ecb81; }
+        :root { --bg-color: #06080c; --card-bg: #0d1117; --text-color: #c9d1d9; --neon-gold: #fcd535; --green: #0ecb81; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        body { background-color: var(--bg-color); color: #c9d1d9; padding: 20px; }
+        body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; }
         header { text-align: center; margin-bottom: 25px; padding: 30px 20px; background: #0f141c; border-radius: 16px; border: 1px solid rgba(252, 213, 53, 0.15); }
         h1 { color: var(--neon-gold); font-size: 24px; margin-top: 10px; }
@@ -22,10 +22,16 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <header><h1>AlphaTrade</h1><p>رادار هوشمند رمزارزها</p></header>
 
-    <button onclick="requestPermission()" style="background: #21262d; color: var(--neon-gold); border: 1px solid var(--neon-gold);">🔔 فعال‌سازی دریافت هشدار</button>
+<div class="container">
+    <header>
+        <h1>AlphaTrade</h1>
+        <p>رادار هوشمند رمزارزها</p>
+    </header>
+
+    <button onclick="requestPermission()" style="background: #21262d; color: var(--neon-gold); border: 1px solid var(--neon-gold);">
+        🔔 فعال‌سازی دریافت هشدار (Notification)
+    </button>
 
     <div class="dollar-box">
         <h2>💵 نرخ دلار</h2>
@@ -36,8 +42,8 @@
 
     <div class="card" style="border: 2px solid var(--neon-gold);">
         <h3>🚀 عضویت ویژه (VIP)</h3>
-        <p style="font-size: 13px; margin-bottom: 10px;">برای دریافت سیگنال‌های VIP شماره خود را وارد و پرداخت کنید.</p>
-        <input type="tel" id="user-phone" placeholder="شماره موبایل">
+        <p style="font-size: 13px; margin-bottom: 10px;">شماره موبایل خود را وارد و برای ارتقا پرداخت کنید.</p>
+        <input type="tel" id="user-phone" placeholder="شماره موبایل (مثلا: 0912...)">
         <button class="btn-vip" onclick="goToPayment()">پرداخت اشتراک در ریمیت</button>
     </div>
 
@@ -51,12 +57,19 @@
         <h3>🔔 تنظیم هشدار</h3>
         <form id="alert-form">
             <input type="text" id="alert-coin-symbol" placeholder="نماد ارز (مثلا BTC)" required>
-            <select id="alert-type"><option value="less">خرید (کمتر از)</option><option value="greater">فروش (بیشتر از)</option></select>
+            <select id="alert-type">
+                <option value="less">خرید (کمتر از)</option>
+                <option value="greater">فروش (بیشتر از)</option>
+            </select>
             <input type="number" id="alert-target" placeholder="قیمت هدف (تومان)" required>
             <button type="submit">ثبت هشدار</button>
         </form>
     </div>
-    <div class="card"><h3>📋 هشدارهای فعال</h3><div id="active-alerts"></div></div>
+
+    <div class="card">
+        <h3>📋 هشدارهای فعال</h3>
+        <div id="active-alerts"></div>
+    </div>
 </div>
 
 <script>
@@ -105,7 +118,11 @@
 
     document.getElementById('alert-form').addEventListener('submit', (e) => {
         e.preventDefault();
-        userAlerts.push({ symbol: document.getElementById('alert-coin-symbol').value.toUpperCase(), type: document.getElementById('alert-type').value, target: parseFloat(document.getElementById('alert-target').value) });
+        userAlerts.push({ 
+            symbol: document.getElementById('alert-coin-symbol').value.toUpperCase(),
+            type: document.getElementById('alert-type').value,
+            target: parseFloat(document.getElementById('alert-target').value)
+        });
         renderAlerts();
     });
 
@@ -117,6 +134,7 @@
             if (coin) {
                 const price = coin.current_price * liveDollarPrice;
                 if ((a.type === 'less' && price <= a.target) || (a.type === 'greater' && price >= a.target)) {
+                    if (Notification.permission === "granted") new Notification("AlphaTrade", { body: `هشدار: ${a.symbol} به ${price.toLocaleString()} رسید.` });
                     alert(`هشدار: ${a.symbol} به ${price.toLocaleString()} رسید.`);
                     userAlerts.splice(i, 1); renderAlerts();
                 }

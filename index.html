@@ -42,8 +42,18 @@
         <div class="dollar-price-huge" id="live-dollar-data">...</div>
         <input type="number" id="manual-rate" placeholder="تنظیم دستی نرخ (تومان)">
         <button onclick="setManualRate()">اعمال نرخ دستی</button>
-    </div>
-    <div class="card">
+  </div>
+    <div class="card" style="border: 2px solid var(--neon-gold);">
+    <h3>🚀 عضویت ویژه (VIP)</h3>
+    <p style="font-size: 13px; margin-bottom: 10px;">برای دریافت سیگنال‌های VIP شماره خود را وارد کنید و اشتراک بگیرید.</p>
+    
+    <form id="vip-form">
+        <input type="tel" id="user-phone" placeholder="شماره موبایل (مثلا: 0912...)" required>
+        <button type="submit" style="background: var(--green); color: #fff;">ثبت شماره و ارتقا به VIP</button>
+    </form>
+</div>
+>
+   <div class="card">
         <h3>🔍 جستجوی ارزها</h3>
         <input type="text" id="search-input" placeholder="نام ارز (مثلا BTC)">
         <div id="crypto-list"></div>

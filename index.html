@@ -1,94 +1,148 @@
-html lang="fa" dir="rtl">
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سامانه هوشمند مانیتورینگ با قابلیت تنظیم نرخ</title>
+    <title>AlphaTrade | رادار هوشمند رمزارز</title>
     <style>
         :root {
-            --bg-color: #0b0e11;
-            --card-bg: #181a20;
-            --text-color: #eaecef;
-            --primary: #fcd535;
+            --bg-color: #06080c;
+            --card-bg: #0d1117;
+            --text-color: #c9d1d9;
+            --neon-gold: #fcd535;
+            --neon-glow: #ffaa00;
             --green: #0ecb81;
             --red: #f6465d;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding: 20px; }
-        header { text-align: center; margin-bottom: 25px; padding: 20px; background: var(--card-bg); border-radius: 12px; border-bottom: 3px solid var(--primary); }
-        header h1 { color: var(--primary); font-size: 24px; margin-bottom: 5px; }
-        
-        /* استایل لوگوی هوشمند جدید */
-        .logo-container {
-            margin-bottom: 15px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 2px var(--primary)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 12px var(--primary)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 2px var(--primary)); }
-        }
-
         .container { max-width: 600px; margin: 0 auto; }
-        .card { background: var(--card-bg); padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
-        h3 { margin-bottom: 15px; font-size: 18px; }
-        
-        .search-box { display: flex; gap: 10px; margin-bottom: 15px; }
-        .search-box input { margin-bottom: 0; flex: 1; }
-        .search-box button { width: auto; padding: 0 20px; margin-bottom: 0; }
-
-        .price-row { display: flex; flex-direction: column; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 8px; margin-bottom: 10px; }
-        .price-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 6px; }
-        .price-details { display: flex; justify-content: space-between; font-size: 14px; color: var(--primary); background: rgba(252, 213, 53, 0.08); padding: 6px; border-radius: 4px; }
-        
-        .coin-name { font-weight: bold; font-size: 16px; text-transform: uppercase; }
-        .coin-sym { font-size: 12px; color: #707a8a; margin-right: 5px; }
-        .coin-price { font-family: monospace; font-weight: bold; font-size: 16px; }
-
-        label { display: block; margin-bottom: 8px; font-size: 14px; color: #b7bdc6; }
-        select, input, button { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #474d57; background: #2b3139; color: white; font-size: 16px; }
-        select:focus, input:focus { border-color: var(--primary); outline: none; }
-        button { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; }
-        button:hover { opacity: 0.9; }
-        
-        .alert-item { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; border-right: 4px solid var(--primary); }
-        .status { font-size: 12px; color: var(--green); text-align: center; margin-top: -10px; margin-bottom: 20px; }
-        .loading { text-align: center; color: #707a8a; padding: 20px; }
-
-        .dollar-box { background: linear-gradient(135deg, #2b3139, #181a20); border: 2px solid var(--primary); text-align: center; padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        .dollar-box h2 { font-size: 18px; color: #fff; margin-bottom: 5px; }
-        .dollar-price-huge { font-size: 26px; color: var(--primary); font-weight: bold; font-family: monospace; margin-bottom: 10px; }
-        .custom-rate-input { display: flex; gap: 5px; max-width: 300px; margin: 0 auto; }
-        .custom-rate-input input { padding: 6px; margin-bottom: 0; font-size: 14px; text-align: center; }
-        .custom-rate-input button { padding: 6px 12px; margin-bottom: 0; font-size: 14px; width: auto; }
+        header { text-align: center; margin-bottom: 25px; padding: 30px 20px; background: #0f141c; border-radius: 16px; border: 1px solid rgba(252, 213, 53, 0.15); }
+        h1 { color: var(--neon-gold); font-size: 24px; margin-top: 10px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 14px; margin-bottom: 20px; border: 1px solid #21262d; }
+        .dollar-box { background: #0d1117; border: 1px solid var(--neon-gold); text-align: center; padding: 20px; border-radius: 14px; margin-bottom: 20px; }
+        .dollar-price-huge { font-size: 32px; color: var(--neon-gold); font-weight: bold; margin: 10px 0; }
+        .price-row { padding: 12px; background: #161b22; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        input, select, button { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #21262d; background: #161b22; color: white; }
+        button { background: var(--neon-gold); color: #000; font-weight: bold; border: none; cursor: pointer; }
+        .alert-item { background: #161b22; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-right: 4px solid var(--neon-gold); font-size: 14px; }
     </style>
 </head>
 <body>
-
 <div class="container">
     <header>
-        <!-- لوگوی اختصاصی و متحرک شما بدون نیاز به فایل خارجی -->
-        <div class="logo-container">
-            <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="45" fill="none" stroke="#fcd535" stroke-width="4"/>
-                <path d="M50 20 L75 45 L60 45 L60 80 L40 80 L40 45 L25 45 Z" fill="#fcd535" transform="rotate(25 50 50)"/>
-                <circle cx="50" cy="50" r="15" fill="#181a20"/>
-                <path d="M45 40 H55 V43 H52 V57 H55 V60 H45 V57 H48 V43 H45 Z" fill="#fcd535" transform="scale(0.9) translate(6, 6)"/>
-                <line x1="50" y1="35" x2="50" y2="38" stroke="#fcd535" stroke-width="2"/>
-                <line x1="50" y1="62" x2="50" y2="65" stroke="#fcd535" stroke-width="2"/>
-            </svg>
-        </div>
-        
-        <h1>رادار هوشمند بازار رمزارز و محاسبات نرخ ارز</h1>
-        <p>نمایش هم‌زمان قیمت جهانی با قابلیت کنترل نرخ مبنا</p>
+        <h1>AlphaTrade</h1>
+        <p>رادار هوشمند رمزارزها</p>
     </header>
-    <div class="status" id="connection-status">🟢 سیستم آماده به کار و متصل به شبکه جهانی است.</div>
-
-    <!-- باکس نرخ دلار -->
     <div class="dollar-box">
-        <h2>💵 نرخ مبنای محاسبه (تومان)</h2>
-        <div class="dollar-price-huge" id="live-dollar-data">75,000 تومان</div>
-        
-        <div class="custom-rate-input">
-            <input type="number" id="manual-rate" placeholder="تنظیم دستی قیمت دلار">
-            <button onclick="setManualRate()">اعمال</button>
-        </div>
+        <h2>💵 نرخ دلار</h2>
+        <div class="dollar-price-huge" id="live-dollar-data">...</div>
+        <input type="number" id="manual-rate" placeholder="تنظیم دستی نرخ (تومان)">
+        <button onclick="setManualRate()">اعمال نرخ دستی</button>
+    </div>
+    <div class="card">
+        <h3>🔍 جستجوی ارزها</h3>
+        <input type="text" id="search-input" placeholder="نام ارز (مثلا BTC)">
+        <div id="crypto-list"></div>
+    </div>
+    <div class="card">
+        <h3>🔔 تنظیم هشدار</h3>
+        <form id="alert-form">
+            <input type="text" id="alert-coin-symbol" placeholder="نماد ارز (مثلا BTC)" required>
+            <select id="alert-type">
+                <option value="less">خرید (کمتر از)</option>
+                <option value="greater">فروش (بیشتر از)</option>
+            </select>
+            <input type="number" id="alert-target" placeholder="قیمت هدف (تومان)" required>
+            <button type="submit">ثبت هشدار</button>
+        </form>
+    </div>
+    <div class="card">
+        <h3>📋 هشدارهای فعال</h3>
+        <div id="active-alerts"></div>
+    </div>
+</div>
+
+<script>
+    let allCoins = []; let userAlerts = []; let liveDollarPrice = 75000;
+
+    function requestPermission() {
+        if ("Notification" in window && Notification.permission !== "granted") Notification.requestPermission();
+    }
+
+    function triggerAlert(message) {
+        if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("AlphaTrade Alert", { body: message });
+        }
+        alert(message);
+    }
+
+    async function fetchLiveDollar() {
+        try {
+            const res = await fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://pro-api.tgju.org/v1/market/indicator/summary/price_dollar_rl'));
+            const data = await res.json();
+            const payload = JSON.parse(data.contents);
+            if(payload.price && !localStorage.getItem('custom_rate')) {
+                liveDollarPrice = parseFloat(payload.price.current) / 10;
+                updateDollarDisplay();
+            }
+        } catch(e) {}
+    }
+
+    function setManualRate() {
+        const val = parseFloat(document.getElementById('manual-rate').value);
+        if(val > 0) { liveDollarPrice = val; localStorage.setItem('custom_rate', val); updateDollarDisplay(); }
+    }
+
+    function updateDollarDisplay() { document.getElementById('live-dollar-data').innerText = liveDollarPrice.toLocaleString() + ' تومان'; }
+
+    async function loadCryptoData() {
+        try {
+            const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=50');
+            allCoins = await res.json();
+            searchCrypto();
+        } catch(e) {}
+    }
+
+    function searchCrypto() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const filtered = allCoins.filter(c => c.name.toLowerCase().includes(query) || c.symbol.toLowerCase().includes(query));
+        const list = document.getElementById('crypto-list');
+        list.innerHTML = filtered.map(c => `<div class="price-row"><div>${c.symbol.toUpperCase()}</div><div>${Math.round(c.current_price * liveDollarPrice).toLocaleString()} تومان</div></div>`).join('');
+    }
+
+    function checkAlertsEngine() {
+        userAlerts.forEach((a, index) => {
+            const coin = allCoins.find(c => c.symbol.toUpperCase() === a.symbol);
+            if (coin) {
+                const price = coin.current_price * liveDollarPrice;
+                if ((a.type === 'less' && price <= a.target) || (a.type === 'greater' && price >= a.target)) {
+                    triggerAlert(`هشدار AlphaTrade: قیمت ${a.symbol} به ${price.toLocaleString()} تومان رسید.`);
+                    userAlerts.splice(index, 1); renderAlerts();
+                }
+            }
+        });
+    }
+
+    document.getElementById('alert-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        requestPermission();
+        userAlerts.push({ 
+            symbol: document.getElementById('alert-coin-symbol').value.toUpperCase(),
+            type: document.getElementById('alert-type').value,
+            target: parseFloat(document.getElementById('alert-target').value)
+        });
+        renderAlerts();
+    });
+
+    function renderAlerts() {
+        document.getElementById('active-alerts').innerHTML = userAlerts.map(a => `<div class="alert-item">${a.symbol} در ${a.target.toLocaleString()}</div>`).join('');
+    }
+
+    document.getElementById('search-input').addEventListener('keyup', searchCrypto);
+    if(localStorage.getItem('custom_rate')) liveDollarPrice = parseFloat(localStorage.getItem('custom_rate'));
+    fetchLiveDollar(); loadCryptoData();
+    setInterval(checkAlertsEngine, 5000);
+</script>
+</body>
+</html>
